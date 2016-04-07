@@ -156,8 +156,8 @@ class QueueJob(models.Model):
             self._subscribe_users()
             for job in self:
                 msg = job._message_failed_job()
-                if msg  and not vals.get('exc_info').contains(
-                        "InvalidDataError: The product type \'bundle\' is not yet supported in the connector"):
+                if msg  and (
+                        "InvalidDataError: The product type \'bundle\' is not yet supported in the connector" not in vals.get('exc_info')):
                     job.message_post(body=msg,
                                      subtype='connector.mt_job_failed')
         return res
