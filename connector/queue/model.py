@@ -154,10 +154,17 @@ class QueueJob(models.Model):
             # subscribe the users now to avoid to subscribe them
             # at every job creation
             self._subscribe_users()
+            silenced_error_mails = [
+                "InvalidDataError: The product type \'bundle\' is not yet supported in the connector", 
+                "InvalidDataError: The product type \'Bundle\' is not yet supported in the connector" 
+            ]
+            amongst_silenced = False
+            for x in silenced_error_mails:
+                if x not in vals.get('exc_info'):
+                    amongst_silenced = True
             for job in self:
                 msg = job._message_failed_job()
-                if msg  and (
-                        "InvalidDataError: The product type \'bundle\' is not yet supported in the connector" not in vals.get('exc_info')):
+                if msg and not amongst_silenced:
                     job.message_post(body=msg,
                                      subtype='connector.mt_job_failed')
         return res
