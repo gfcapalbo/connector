@@ -125,7 +125,7 @@ import openerp
 
 from .channels import ChannelManager, PENDING, ENQUEUED, NOT_DONE
 
-SELECT_TIMEOUT = 60
+SELECT_TIMEOUT = 35
 ERROR_RECOVERY_DELAY = 5
 
 _logger = logging.getLogger(__name__)
